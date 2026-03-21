@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  displayName  String
+  avatarUrl    String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  accounts     LinkedAccount[]
+  settings     UserSettings?
+}
+
+model UserSettings {
+  id            String  @id @default(cuid())
+  userId        String  @unique
+  showPnl       Boolean @default(false)
+  showPayouts   Boolean @default(false)
+  showPositions Boolean @default(false)
+  showDeposits  Boolean @default(false)
+
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LinkedAccount {
+  id                    String    @id @default(cuid())
+  userId                String
+  orchestratorAccountId String
+  vpsId                 String
+  server                String
+  login                 String
+  broker                String?
+
+  balance               Float     @default(0)
+  equity                Float     @default(0)
+  unrealizedPnl         Float     @default(0)
+  realizedPnl           Float     @default(0)
+  totalDeposits         Float     @default(0)
+  totalWithdrawals      Float     @default(0)
+  roi                   Float     @default(0)
+  lastSyncedAt          DateTime?
+  createdAt             DateTime  @default(now())
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  snapshots             PnlSnapshot[]
+  deals                 Deal[]
+
+  @@unique([userId, server, login])
+  @@index([userId])
+}
+
+model Deal {
+  id          String   @id @default(cuid())
+  accountId   String
+  dealTicket  BigInt   @unique
+  orderTicket BigInt?
+  symbol      String
+  type        String
+  entry       String
+  volume      Float
+  price       Float
+  profit      Float
+  swap        Float    @default(0)
+  commission  Float    @default(0)
+  comment     String   @default("")
+  positionId  BigInt?
+  closedAt    DateTime
+
+  account     LinkedAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, closedAt])
+}
+
+model PnlSnapshot {
+  id            String   @id @default(cuid())
+  accountId     String
+  balance       Float
+  equity        Float
+  realizedPnl   Float
+  unrealizedPnl Float
+  timestamp     DateTime @default(now())
+
+  account       LinkedAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, timestamp])
+}
