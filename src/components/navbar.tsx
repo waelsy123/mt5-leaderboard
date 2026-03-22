@@ -21,10 +21,12 @@ const navLinks = [
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    setIsLoggedIn(!!getCookie("lb_token"));
+    setMounted(true);
+    setIsLoggedIn(!!getCookie("lb_logged_in"));
   }, [pathname]);
 
   useEffect(() => {
@@ -99,7 +101,7 @@ export function Navbar() {
 
           {/* Auth + Mobile toggle */}
           <div className="flex items-center gap-3">
-            {isLoggedIn ? (
+            {mounted && isLoggedIn ? (
               <div className="hidden md:flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center">
                   <svg
@@ -123,7 +125,7 @@ export function Navbar() {
                   Logout
                 </button>
               </div>
-            ) : (
+            ) : mounted ? (
               <div className="hidden md:flex items-center gap-2">
                 <Link
                   href="/login"
@@ -138,7 +140,7 @@ export function Navbar() {
                   Sign Up
                 </Link>
               </div>
-            )}
+            ) : null}
 
             {/* Hamburger */}
             <button
