@@ -8,7 +8,6 @@ const CASHBACK_TABLE: Record<number, number> = {
   25000: 40,
   50000: 60,
   100000: 100,
-  200000: 200,
 };
 
 export async function PATCH(
@@ -42,17 +41,10 @@ export async function PATCH(
   if (status === "COMPLETED") {
     updateData.endDate = new Date();
 
-    // If result is PASSED, calculate cashback and set to ELIGIBLE
-    const finalResult = result ?? existing.result;
-    if (finalResult === "PASSED") {
-      const cashback = CASHBACK_TABLE[existing.accountSize] ?? 0;
-      updateData.cashbackAmount = cashback;
-      updateData.cashbackStatus = "ELIGIBLE";
-    } else {
-      // FAILED or BREACHED: no cashback
-      updateData.cashbackAmount = 0;
-      updateData.cashbackStatus = "REJECTED";
-    }
+    // Cashback is paid regardless of pass or fail
+    const cashback = CASHBACK_TABLE[existing.accountSize] ?? 0;
+    updateData.cashbackAmount = cashback;
+    updateData.cashbackStatus = "ELIGIBLE";
   }
 
   const updated = await prisma.challenge.update({

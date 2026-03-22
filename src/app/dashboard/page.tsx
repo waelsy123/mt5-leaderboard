@@ -315,7 +315,7 @@ export default function DashboardPage() {
         {/* Link account form */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-4">
           <h3 className="text-sm font-semibold text-zinc-300 mb-4">
-            Link MT5 Account
+            Link MT5 Challenge Account
           </h3>
           <form
             onSubmit={handleLink}
@@ -359,6 +359,12 @@ export default function DashboardPage() {
               </button>
             </div>
           </form>
+          <p className="text-xs text-zinc-500 mt-3">
+            Enter your MT5 read-only credentials. We only track your trading performance — no trades will be executed on your account.
+          </p>
+          <p className="text-xs text-zinc-500 mt-1">
+            Only MT5 accounts from supported prop firms can be linked.
+          </p>
           {error && (
             <p className="text-red-400 text-sm mt-3 flex items-center gap-1.5">
               <svg
@@ -459,7 +465,6 @@ export default function DashboardPage() {
                   <option value="25000">$25,000</option>
                   <option value="50000">$50,000</option>
                   <option value="100000">$100,000</option>
-                  <option value="200000">$200,000</option>
                 </select>
               </div>
               <div>

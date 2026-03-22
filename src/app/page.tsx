@@ -12,13 +12,12 @@ interface Stats {
 }
 
 /* ---------- Cashback Calculator data ---------- */
-const accountSizes = [10_000, 25_000, 50_000, 100_000, 200_000] as const;
+const accountSizes = [10_000, 25_000, 50_000, 100_000] as const;
 const challengeFees: Record<number, number> = {
-  10_000: 155,
-  25_000: 250,
-  50_000: 350,
-  100_000: 540,
-  200_000: 1080,
+  10_000: 100,
+  25_000: 200,
+  50_000: 300,
+  100_000: 500,
 };
 
 /* ---------- Supported brokers ---------- */
@@ -196,26 +195,26 @@ export default function Home() {
         <div className="relative">
           <div className="flex animate-scroll gap-4 w-max">
             {[
-              { name: "AlphaFX_Pro", broker: "FTMO", size: "$100K", cashback: "$108", status: "Paid" },
-              { name: "Sarah_Trades", broker: "AquaFunded", size: "$200K", cashback: "$216", status: "Paid" },
-              { name: "Tokyo_Scalper", broker: "The5%ers", size: "$50K", cashback: "$70", status: "Paid" },
-              { name: "GoldBull_Mike", broker: "MyFundedFX", size: "$100K", cashback: "$108", status: "Paid" },
-              { name: "LondonPips", broker: "Funded Next", size: "$25K", cashback: "$50", status: "Paid" },
-              { name: "SwingKing_99", broker: "FTMO", size: "$200K", cashback: "$216", status: "Processing" },
-              { name: "ForexNinja", broker: "AquaFunded", size: "$50K", cashback: "$70", status: "Paid" },
-              { name: "ScalpMaster_K", broker: "E8 Funding", size: "$100K", cashback: "$108", status: "Paid" },
-              { name: "ProfitPanda", broker: "FTMO", size: "$50K", cashback: "$70", status: "Paid" },
-              { name: "NYSession_Pro", broker: "The5%ers", size: "$200K", cashback: "$216", status: "Processing" },
-              { name: "AlphaFX_Pro", broker: "FTMO", size: "$100K", cashback: "$108", status: "Paid" },
-              { name: "Sarah_Trades", broker: "AquaFunded", size: "$200K", cashback: "$216", status: "Paid" },
-              { name: "Tokyo_Scalper", broker: "The5%ers", size: "$50K", cashback: "$70", status: "Paid" },
-              { name: "GoldBull_Mike", broker: "MyFundedFX", size: "$100K", cashback: "$108", status: "Paid" },
-              { name: "LondonPips", broker: "Funded Next", size: "$25K", cashback: "$50", status: "Paid" },
-              { name: "SwingKing_99", broker: "FTMO", size: "$200K", cashback: "$216", status: "Processing" },
-              { name: "ForexNinja", broker: "AquaFunded", size: "$50K", cashback: "$70", status: "Paid" },
-              { name: "ScalpMaster_K", broker: "E8 Funding", size: "$100K", cashback: "$108", status: "Paid" },
-              { name: "ProfitPanda", broker: "FTMO", size: "$50K", cashback: "$70", status: "Paid" },
-              { name: "NYSession_Pro", broker: "The5%ers", size: "$200K", cashback: "$216", status: "Processing" },
+              { name: "AlphaFX_Pro", broker: "FTMO", size: "$100K", cashback: "$100", status: "Paid" },
+              { name: "Sarah_Trades", broker: "AquaFunded", size: "$100K", cashback: "$100", status: "Paid" },
+              { name: "Tokyo_Scalper", broker: "The5%ers", size: "$50K", cashback: "$60", status: "Paid" },
+              { name: "GoldBull_Mike", broker: "MyFundedFX", size: "$100K", cashback: "$100", status: "Paid" },
+              { name: "LondonPips", broker: "Funded Next", size: "$25K", cashback: "$40", status: "Paid" },
+              { name: "SwingKing_99", broker: "FTMO", size: "$100K", cashback: "$100", status: "Processing" },
+              { name: "ForexNinja", broker: "AquaFunded", size: "$50K", cashback: "$60", status: "Paid" },
+              { name: "ScalpMaster_K", broker: "E8 Funding", size: "$100K", cashback: "$100", status: "Paid" },
+              { name: "ProfitPanda", broker: "FTMO", size: "$50K", cashback: "$60", status: "Paid" },
+              { name: "NYSession_Pro", broker: "The5%ers", size: "$100K", cashback: "$100", status: "Processing" },
+              { name: "AlphaFX_Pro", broker: "FTMO", size: "$100K", cashback: "$100", status: "Paid" },
+              { name: "Sarah_Trades", broker: "AquaFunded", size: "$100K", cashback: "$100", status: "Paid" },
+              { name: "Tokyo_Scalper", broker: "The5%ers", size: "$50K", cashback: "$60", status: "Paid" },
+              { name: "GoldBull_Mike", broker: "MyFundedFX", size: "$100K", cashback: "$100", status: "Paid" },
+              { name: "LondonPips", broker: "Funded Next", size: "$25K", cashback: "$40", status: "Paid" },
+              { name: "SwingKing_99", broker: "FTMO", size: "$100K", cashback: "$100", status: "Processing" },
+              { name: "ForexNinja", broker: "AquaFunded", size: "$50K", cashback: "$60", status: "Paid" },
+              { name: "ScalpMaster_K", broker: "E8 Funding", size: "$100K", cashback: "$100", status: "Paid" },
+              { name: "ProfitPanda", broker: "FTMO", size: "$50K", cashback: "$60", status: "Paid" },
+              { name: "NYSession_Pro", broker: "The5%ers", size: "$100K", cashback: "$100", status: "Processing" },
             ].map((item, i) => (
               <div key={i} className="shrink-0 w-72 bg-zinc-900 border border-zinc-800 rounded-2xl p-5 hover:border-zinc-700 transition-colors">
                 <div className="flex items-center justify-between mb-3">
@@ -320,6 +319,62 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ===================== TESTIMONIALS ===================== */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl font-bold text-white mb-3">What Traders Are Saying</h2>
+          <p className="text-zinc-400 max-w-xl mx-auto">
+            Real feedback from traders using ProofTrades every day.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-6">
+          {[
+            {
+              name: "Marcus T.",
+              role: "Funded Trader, FTMO",
+              quote: "Got my 20% cashback within 48 hours of completing my challenge. ProofTrades makes it a no-brainer to track your progress.",
+              rating: 5,
+            },
+            {
+              name: "Aisha K.",
+              role: "Swing Trader, AquaFunded",
+              quote: "The leaderboard keeps me motivated. Seeing my ranking improve week over week pushed me to stay disciplined.",
+              rating: 5,
+            },
+            {
+              name: "David L.",
+              role: "Scalper, The5%ers",
+              quote: "I've failed 3 challenges and still got cashback on all of them. That's $180 back just for trying. Can't beat that.",
+              rating: 5,
+            },
+            {
+              name: "Yuki M.",
+              role: "Day Trader, MyFundedFX",
+              quote: "Finally a platform that tracks everything in one place. My PNL, challenges, and cashback — all automated.",
+              rating: 5,
+            },
+          ].map((t) => (
+            <div
+              key={t.name}
+              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 hover:border-zinc-700 transition-colors relative"
+            >
+              <span className="absolute top-4 right-5 text-4xl font-serif text-blue-600/10 leading-none select-none">&ldquo;</span>
+              <div className="flex gap-0.5 mb-3">
+                {Array.from({ length: t.rating }).map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-sm">{"\u2605"}</span>
+                ))}
+              </div>
+              <p className="text-sm text-zinc-300 leading-relaxed mb-4">{t.quote}</p>
+              <div>
+                <p className="text-sm font-semibold text-zinc-200">{t.name}</p>
+                <p className="text-xs text-zinc-500">{t.role}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

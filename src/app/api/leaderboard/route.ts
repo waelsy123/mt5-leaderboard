@@ -9,10 +9,21 @@ export async function GET(request: NextRequest) {
   const users = await prisma.user.findMany({
     where: { settings: { showPnl: true } },
     include: {
-      accounts: { select: { balance: true, equity: true, realizedPnl: true, unrealizedPnl: true, totalDeposits: true, totalWithdrawals: true, roi: true } },
+      accounts: { select: { id: true, balance: true, equity: true, realizedPnl: true, unrealizedPnl: true, totalDeposits: true, totalWithdrawals: true, roi: true } },
       settings: true,
+      challenges: { select: { cashbackAmount: true, cashbackStatus: true } },
     },
   });
+
+  // Count total trades (deals) per user
+  const dealCounts = await prisma.deal.groupBy({
+    by: ["accountId"],
+    _count: { id: true },
+  });
+  const dealCountMap = new Map<string, number>();
+  for (const dc of dealCounts) {
+    dealCountMap.set(dc.accountId, dc._count.id);
+  }
 
   const entries = users.map((u) => {
     const totalBalance = u.accounts.reduce((s, a) => s + a.balance, 0);
@@ -22,6 +33,16 @@ export async function GET(request: NextRequest) {
     const totalDeposits = u.accounts.reduce((s, a) => s + a.totalDeposits, 0);
     const totalWithdrawals = u.accounts.reduce((s, a) => s + a.totalWithdrawals, 0);
     const roi = totalDeposits > 0 ? (totalRealizedPnl / totalDeposits) * 100 : 0;
+
+    const totalCashback = u.challenges.reduce(
+      (s, c) => s + (c.cashbackStatus === "PAID" ? c.cashbackAmount : 0),
+      0
+    );
+
+    const totalTrades = u.accounts.reduce(
+      (s, a) => s + (dealCountMap.get(a.id) ?? 0),
+      0
+    );
 
     return {
       userId: u.id,
@@ -35,6 +56,8 @@ export async function GET(request: NextRequest) {
       totalDeposits: u.settings?.showDeposits ? Math.round(totalDeposits * 100) / 100 : undefined,
       totalWithdrawals: u.settings?.showPayouts ? Math.round(totalWithdrawals * 100) / 100 : undefined,
       roi: Math.round(roi * 100) / 100,
+      totalCashback: Math.round(totalCashback * 100) / 100,
+      totalTrades,
     };
   });
 

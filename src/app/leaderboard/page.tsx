@@ -13,6 +13,8 @@ interface Entry {
   totalEquity: number;
   roi: number;
   accountCount: number;
+  totalCashback?: number;
+  totalTrades?: number;
 }
 
 const timeFilters = ["All Time", "This Month", "This Week"] as const;
@@ -27,6 +29,13 @@ function rankBadge(rank: number) {
   if (rank === 2) return "bg-zinc-400/20 text-zinc-300 border-zinc-400/30";
   if (rank === 3) return "bg-amber-600/20 text-amber-400 border-amber-600/30";
   return "bg-zinc-800 text-zinc-500 border-zinc-700";
+}
+
+function rankMedal(rank: number): string {
+  if (rank === 1) return "\uD83E\uDD47";
+  if (rank === 2) return "\uD83E\uDD48";
+  if (rank === 3) return "\uD83E\uDD49";
+  return "";
 }
 
 export default function LeaderboardPage() {
@@ -146,6 +155,8 @@ export default function LeaderboardPage() {
                   <th className="px-5 py-4 text-right">Unrealized PNL</th>
                   <th className="px-5 py-4 text-right">ROI %</th>
                   <th className="px-5 py-4 text-right">Total Equity</th>
+                  <th className="px-5 py-4 text-right">Cashback Earned</th>
+                  <th className="px-5 py-4 text-right">Total Trades</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800/60">
@@ -160,7 +171,7 @@ export default function LeaderboardPage() {
                           e.rank
                         )}`}
                       >
-                        {e.rank}
+                        {rankMedal(e.rank) || e.rank}
                       </span>
                     </td>
                     <td className="px-5 py-4">
@@ -241,6 +252,18 @@ export default function LeaderboardPage() {
                         })}
                       </span>
                     </td>
+                    <td className="px-5 py-4 text-right">
+                      <span className="font-mono text-sm text-green-400">
+                        {e.totalCashback != null && e.totalCashback > 0
+                          ? `$${e.totalCashback.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                          : "\u2014"}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4 text-right">
+                      <span className="font-mono text-sm text-zinc-400">
+                        {e.totalTrades != null ? e.totalTrades.toLocaleString() : "\u2014"}
+                      </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -262,7 +285,7 @@ export default function LeaderboardPage() {
                         e.rank
                       )}`}
                     >
-                      {e.rank}
+                      {rankMedal(e.rank) || e.rank}
                     </span>
                     {e.avatarUrl ? (
                       <img
