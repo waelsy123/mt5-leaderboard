@@ -55,7 +55,7 @@ export default function LoginPage() {
                 />
               </svg>
             </div>
-            <span className="text-xl font-bold text-white">PropTrack</span>
+            <span className="text-xl font-bold text-white">ProofTrades</span>
           </div>
           <h1 className="text-2xl font-bold text-white mb-1">Welcome back</h1>
           <p className="text-sm text-zinc-500">

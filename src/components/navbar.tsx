@@ -66,7 +66,7 @@ export function Navbar() {
             </div>
             <div>
               <span className="text-lg font-bold text-white tracking-tight">
-                PropTrack
+                ProofTrades
               </span>
               <span className="hidden sm:inline text-xs text-zinc-500 ml-2">
                 Challenge Tracker

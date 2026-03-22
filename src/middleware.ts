@@ -14,6 +14,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/api/leaderboard") ||
     pathname.startsWith("/api/users/") ||
     pathname.startsWith("/api/sync") ||
+    pathname.startsWith("/api/stats") ||
+    pathname === "/cashback" ||
     pathname === "/api/health" ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon")

@@ -56,7 +56,7 @@ export default function RegisterPage() {
                 />
               </svg>
             </div>
-            <span className="text-xl font-bold text-white">PropTrack</span>
+            <span className="text-xl font-bold text-white">ProofTrades</span>
           </div>
           <h1 className="text-2xl font-bold text-white mb-1">
             Create your account

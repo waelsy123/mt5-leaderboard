@@ -23,7 +23,7 @@ export function Footer() {
                   />
                 </svg>
               </div>
-              <span className="text-sm font-bold text-white">PropTrack</span>
+              <span className="text-sm font-bold text-white">ProofTrades</span>
             </div>
             <p className="text-zinc-500 text-sm leading-relaxed">
               Track prop firm challenges, compete on the leaderboard, and earn
@@ -101,7 +101,7 @@ export function Footer() {
 
         <div className="border-t border-zinc-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm text-zinc-600">
-            &copy; {new Date().getFullYear()} PropTrack. All rights reserved.
+            &copy; {new Date().getFullYear()} ProofTrades. All rights reserved.
           </p>
           <p className="text-xs text-zinc-700">
             Trading involves risk. Past performance is not indicative of future
