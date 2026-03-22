@@ -15,4 +15,4 @@ USER appuser
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma db push --skip-generate; PORT=${PORT:-3000} node .next/standalone/server.js"]
+CMD ["sh", "-c", "npx prisma db push --skip-generate; PORT=${PORT:-3000} npm start"]
