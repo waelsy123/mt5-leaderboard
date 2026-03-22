@@ -9,12 +9,11 @@ const CASHBACK_TABLE: Record<number, { fee: number; cashback: number }> = {
   25000: { fee: 200, cashback: 40 },
   50000: { fee: 300, cashback: 60 },
   100000: { fee: 500, cashback: 100 },
-  200000: { fee: 1000, cashback: 200 },
 };
 
 const BROKERS = ["FTMO", "AquaFunded", "The5%ers", "MyFundedFX", "Funded Next"];
 const CHALLENGE_TYPES = ["Phase 1", "Phase 2", "Funded", "Evaluation"];
-const ACCOUNT_SIZES = [10000, 25000, 50000, 100000, 200000];
+const ACCOUNT_SIZES = [10000, 25000, 50000, 100000];
 const SERVERS = [
   "FTMO-Server",
   "AquaFunded-Live",
@@ -193,13 +192,37 @@ async function main() {
         } else if (resultRoll < 0.9) {
           result = "FAILED";
           endBalance = startBalance - startBalance * randBetween(3, maxDrawdown) / 100;
-          cashbackAmount = 0;
-          cashbackStatus = CashbackStatus.REJECTED;
+          cashbackAmount = cashback;
+
+          // Cashback for failed: 30% PAID, 30% ELIGIBLE, 20% PROCESSING, 20% PENDING
+          const cbFailRoll = Math.random();
+          if (cbFailRoll < 0.3) {
+            cashbackStatus = CashbackStatus.PAID;
+            cashbackPaidAt = daysAgo(randInt(1, 10));
+          } else if (cbFailRoll < 0.6) {
+            cashbackStatus = CashbackStatus.ELIGIBLE;
+          } else if (cbFailRoll < 0.8) {
+            cashbackStatus = CashbackStatus.PROCESSING;
+          } else {
+            cashbackStatus = CashbackStatus.PENDING;
+          }
         } else {
           result = "BREACHED";
           endBalance = startBalance - startBalance * randBetween(maxDrawdown, maxDrawdown + 5) / 100;
-          cashbackAmount = 0;
-          cashbackStatus = CashbackStatus.REJECTED;
+          cashbackAmount = cashback;
+
+          // Cashback for breached: 30% PAID, 30% ELIGIBLE, 20% PROCESSING, 20% PENDING
+          const cbBreachRoll = Math.random();
+          if (cbBreachRoll < 0.3) {
+            cashbackStatus = CashbackStatus.PAID;
+            cashbackPaidAt = daysAgo(randInt(1, 10));
+          } else if (cbBreachRoll < 0.6) {
+            cashbackStatus = CashbackStatus.ELIGIBLE;
+          } else if (cbBreachRoll < 0.8) {
+            cashbackStatus = CashbackStatus.PROCESSING;
+          } else {
+            cashbackStatus = CashbackStatus.PENDING;
+          }
         }
       } else {
         // CANCELLED

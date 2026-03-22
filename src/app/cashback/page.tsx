@@ -5,11 +5,10 @@ import Link from "next/link";
 
 /* ---------- Cashback table data ---------- */
 const challengeData = [
-  { size: "$10,000", phase1Fee: "$155", phase2Fee: "$155", totalFee: "$155", cashback: "$31" },
-  { size: "$25,000", phase1Fee: "$250", phase2Fee: "$250", totalFee: "$250", cashback: "$50" },
-  { size: "$50,000", phase1Fee: "$350", phase2Fee: "$350", totalFee: "$350", cashback: "$70" },
-  { size: "$100,000", phase1Fee: "$540", phase2Fee: "$540", totalFee: "$540", cashback: "$108" },
-  { size: "$200,000", phase1Fee: "$1,080", phase2Fee: "$1,080", totalFee: "$1,080", cashback: "$216" },
+  { size: "$10,000", phase1Fee: "$100", phase2Fee: "$100", totalFee: "$100", cashback: "$20" },
+  { size: "$25,000", phase1Fee: "$200", phase2Fee: "$200", totalFee: "$200", cashback: "$40" },
+  { size: "$50,000", phase1Fee: "$300", phase2Fee: "$300", totalFee: "$300", cashback: "$60" },
+  { size: "$100,000", phase1Fee: "$500", phase2Fee: "$500", totalFee: "$500", cashback: "$100" },
 ];
 
 /* ---------- FAQ data ---------- */
@@ -200,6 +199,10 @@ export default function CashbackPage() {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="mt-4 space-y-2">
+          <p className="text-sm text-zinc-400">MT5 challenge accounts only. Maximum account size: $100,000.</p>
+          <p className="text-sm text-zinc-400">Cashback is paid regardless of whether you pass or fail the challenge.</p>
         </div>
       </section>
 
