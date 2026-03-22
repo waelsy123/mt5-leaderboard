@@ -48,7 +48,7 @@ export default function DashboardPage() {
   const [error, setError] = useState("");
 
   const supportedBrokers = [
-    { key: "ftmo", label: "FTMO", servers: ["FTMO-Server", "FTMO-Server2", "FTMO-Server3"] },
+    { key: "ftmo", label: "FTMO", servers: ["FTMO-Server", "FTMO-Server2", "FTMO-Server3", "FTMO-Server4", "FTMO-Server5"] },
     { key: "aquafunded", label: "AquaFunded", servers: ["AquaFunded-Server"] },
   ];
   const selectedBroker = supportedBrokers.find((b) => b.key === linkForm.broker);
