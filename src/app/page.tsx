@@ -131,6 +131,12 @@ export default function Home() {
       {/* ===================== STATS BAR ===================== */}
       <section className="border-y border-zinc-800/80 bg-zinc-900/40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex justify-center mb-4">
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse-glow" />
+              <span className="text-xs font-medium text-green-400">Live Data</span>
+            </span>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             <StatBlock
               label="Active Traders"
@@ -148,6 +154,36 @@ export default function Home() {
               label="Active Challenges"
               value={stats ? stats.activeChallenges.toLocaleString() : "--"}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== TRUST BADGES ===================== */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-wrap justify-center gap-8 items-center">
+          <div className="flex items-center gap-2 text-zinc-500 text-sm">
+            <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span>256-bit SSL Encrypted</span>
+          </div>
+          <div className="flex items-center gap-2 text-zinc-500 text-sm">
+            <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span>Read-Only Access</span>
+          </div>
+          <div className="flex items-center gap-2 text-zinc-500 text-sm">
+            <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>Instant USDT Payouts</span>
+          </div>
+          <div className="flex items-center gap-2 text-zinc-500 text-sm">
+            <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>1,000+ Traders Trust Us</span>
           </div>
         </div>
       </section>
