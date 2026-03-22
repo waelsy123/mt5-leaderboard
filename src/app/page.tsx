@@ -187,6 +187,65 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===================== CASHBACK CAROUSEL ===================== */}
+      <section className="py-16 overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+          <h2 className="text-center text-3xl font-bold text-white mb-3">Recent Cashback Payouts</h2>
+          <p className="text-center text-zinc-400 max-w-xl mx-auto">Real traders earning real cashback on their prop firm challenges.</p>
+        </div>
+        <div className="relative">
+          <div className="flex animate-scroll gap-4 w-max">
+            {[
+              { name: "AlphaFX_Pro", broker: "FTMO", size: "$100K", cashback: "$108", status: "Paid" },
+              { name: "Sarah_Trades", broker: "AquaFunded", size: "$200K", cashback: "$216", status: "Paid" },
+              { name: "Tokyo_Scalper", broker: "The5%ers", size: "$50K", cashback: "$70", status: "Paid" },
+              { name: "GoldBull_Mike", broker: "MyFundedFX", size: "$100K", cashback: "$108", status: "Paid" },
+              { name: "LondonPips", broker: "Funded Next", size: "$25K", cashback: "$50", status: "Paid" },
+              { name: "SwingKing_99", broker: "FTMO", size: "$200K", cashback: "$216", status: "Processing" },
+              { name: "ForexNinja", broker: "AquaFunded", size: "$50K", cashback: "$70", status: "Paid" },
+              { name: "ScalpMaster_K", broker: "E8 Funding", size: "$100K", cashback: "$108", status: "Paid" },
+              { name: "ProfitPanda", broker: "FTMO", size: "$50K", cashback: "$70", status: "Paid" },
+              { name: "NYSession_Pro", broker: "The5%ers", size: "$200K", cashback: "$216", status: "Processing" },
+              { name: "AlphaFX_Pro", broker: "FTMO", size: "$100K", cashback: "$108", status: "Paid" },
+              { name: "Sarah_Trades", broker: "AquaFunded", size: "$200K", cashback: "$216", status: "Paid" },
+              { name: "Tokyo_Scalper", broker: "The5%ers", size: "$50K", cashback: "$70", status: "Paid" },
+              { name: "GoldBull_Mike", broker: "MyFundedFX", size: "$100K", cashback: "$108", status: "Paid" },
+              { name: "LondonPips", broker: "Funded Next", size: "$25K", cashback: "$50", status: "Paid" },
+              { name: "SwingKing_99", broker: "FTMO", size: "$200K", cashback: "$216", status: "Processing" },
+              { name: "ForexNinja", broker: "AquaFunded", size: "$50K", cashback: "$70", status: "Paid" },
+              { name: "ScalpMaster_K", broker: "E8 Funding", size: "$100K", cashback: "$108", status: "Paid" },
+              { name: "ProfitPanda", broker: "FTMO", size: "$50K", cashback: "$70", status: "Paid" },
+              { name: "NYSession_Pro", broker: "The5%ers", size: "$200K", cashback: "$216", status: "Processing" },
+            ].map((item, i) => (
+              <div key={i} className="shrink-0 w-72 bg-zinc-900 border border-zinc-800 rounded-2xl p-5 hover:border-zinc-700 transition-colors">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-400">
+                      {item.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-zinc-200">{item.name}</p>
+                      <p className="text-xs text-zinc-500">{item.broker}</p>
+                    </div>
+                  </div>
+                  <span className={`px-2 py-0.5 rounded-lg text-[10px] font-medium ${
+                    item.status === "Paid"
+                      ? "bg-green-500/10 text-green-400 border border-green-500/20"
+                      : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"
+                  }`}>
+                    {item.status}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-zinc-500">{item.size} Challenge</span>
+                  <span className="text-sm font-mono font-bold text-green-400">{item.cashback} USDT</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ===================== SUPPORTED BROKERS ===================== */}
       <section className="border-y border-zinc-800/80 bg-zinc-900/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14">

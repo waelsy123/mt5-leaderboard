@@ -16,11 +16,14 @@ export async function GET() {
       }),
     ]);
 
+  const volume = volumeAgg._sum.balance ?? 0;
+  const cashback = cashbackPaid._sum.cashbackAmount ?? 0;
+
   return NextResponse.json({
-    totalTraders,
+    activeTraders: totalTraders,
     totalAccounts,
-    totalVolume: volumeAgg._sum.balance ?? 0,
-    totalCashbackPaid: cashbackPaid._sum.cashbackAmount ?? 0,
+    totalVolume: `$${volume.toLocaleString("en-US", { maximumFractionDigits: 0 })}`,
+    cashbackPaid: `$${cashback.toLocaleString("en-US", { maximumFractionDigits: 0 })}`,
     activeChallenges,
   });
 }

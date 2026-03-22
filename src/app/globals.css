@@ -76,6 +76,18 @@ button:focus-visible {
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+/* Infinite scroll carousel */
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-scroll {
+  animation: scroll 40s linear infinite;
+}
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
 /* Gradient text */
 .text-gradient {
   background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #2563eb 100%);
