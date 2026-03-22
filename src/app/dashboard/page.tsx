@@ -5,6 +5,7 @@ import Link from "next/link";
 
 interface Account {
   id: string;
+  orchestratorAccountId: string;
   server: string;
   login: string;
   broker: string | null;
@@ -42,9 +43,15 @@ export default function DashboardPage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [linkForm, setLinkForm] = useState({ server: "", login: "" });
+  const [linkForm, setLinkForm] = useState({ broker: "", server: "", login: "", password: "" });
   const [linking, setLinking] = useState(false);
   const [error, setError] = useState("");
+
+  const supportedBrokers = [
+    { key: "ftmo", label: "FTMO", servers: ["FTMO-Server", "FTMO-Server2", "FTMO-Server3"] },
+    { key: "aquafunded", label: "AquaFunded", servers: ["AquaFunded-Server"] },
+  ];
+  const selectedBroker = supportedBrokers.find((b) => b.key === linkForm.broker);
   const [showChallengeForm, setShowChallengeForm] = useState(false);
   const [challengeForm, setChallengeForm] = useState({
     broker: "",
@@ -77,19 +84,35 @@ export default function DashboardPage() {
   async function handleLink(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    // Client-side validations
+    if (!linkForm.broker) { setError("Please select a prop firm."); return; }
+    if (!linkForm.server) { setError("Please select a server."); return; }
+    if (!linkForm.login) { setError("Please enter your MT5 login number."); return; }
+    if (!linkForm.password) { setError("Please enter your read-only (investor) password."); return; }
+    if (linkForm.server.toLowerCase().includes("demo")) {
+      setError("Demo accounts are not eligible. Please use a live challenge account.");
+      return;
+    }
+
     setLinking(true);
     try {
       const res = await fetch("/api/me/accounts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(linkForm),
+        body: JSON.stringify({
+          broker: linkForm.broker,
+          server: linkForm.server,
+          login: linkForm.login,
+          password: linkForm.password,
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
         setError(data.error);
         return;
       }
-      setLinkForm({ server: "", login: "" });
+      setLinkForm({ broker: "", server: "", login: "", password: "" });
       fetchAccounts();
     } catch {
       setError("Network error");
@@ -245,10 +268,23 @@ export default function DashboardPage() {
                       >
                         {a.login}@{a.server}
                       </Link>
-                      <p className="text-zinc-500 text-xs mt-0.5">
-                        {a.broker || "Unknown broker"}
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <p className="text-zinc-500 text-xs">
+                          {a.broker || "Unknown broker"}
+                        </p>
+                        {a.orchestratorAccountId === "pending" ? (
+                          <span className="px-1.5 py-0.5 rounded-md bg-yellow-500/10 border border-yellow-500/20 text-[10px] font-medium text-yellow-400">
+                            Pending Verification
+                          </span>
+                        ) : (
+                          <span className="px-1.5 py-0.5 rounded-md bg-green-500/10 border border-green-500/20 text-[10px] font-medium text-green-400">
+                            Verified
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-zinc-600 text-xs">
                         {a.lastSyncedAt && (
-                          <span className="ml-2 text-zinc-600">
+                          <span>
                             Synced{" "}
                             {new Date(a.lastSyncedAt).toLocaleTimeString()}
                           </span>
@@ -314,57 +350,92 @@ export default function DashboardPage() {
 
         {/* Link account form */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-4">
-          <h3 className="text-sm font-semibold text-zinc-300 mb-4">
-            Link MT5 Challenge Account
+          <h3 className="text-sm font-semibold text-zinc-300 mb-1">
+            Add Fresh Challenge Account
           </h3>
-          <form
-            onSubmit={handleLink}
-            className="flex flex-col sm:flex-row gap-3"
-          >
-            <div className="flex-1">
-              <label className="text-xs text-zinc-500 block mb-1.5">
-                Server
-              </label>
-              <input
-                value={linkForm.server}
-                onChange={(e) =>
-                  setLinkForm((p) => ({ ...p, server: e.target.value }))
-                }
-                placeholder="e.g. AquaFunded-Server"
-                required
-                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 transition-colors"
-              />
+          <p className="text-xs text-zinc-500 mb-5">
+            Enter your MT5 read-only (investor) password. We use it to verify the challenge is real and has zero trade history. No trades will ever be placed.
+          </p>
+          <form onSubmit={handleLink} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Broker dropdown */}
+              <div>
+                <label className="text-xs text-zinc-500 block mb-1.5">Prop Firm</label>
+                <select
+                  value={linkForm.broker}
+                  onChange={(e) => setLinkForm((p) => ({ ...p, broker: e.target.value, server: "" }))}
+                  required
+                  className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                >
+                  <option value="">Select prop firm...</option>
+                  {supportedBrokers.map((b) => (
+                    <option key={b.key} value={b.key}>{b.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Server dropdown (filtered by broker) */}
+              <div>
+                <label className="text-xs text-zinc-500 block mb-1.5">Server</label>
+                <select
+                  value={linkForm.server}
+                  onChange={(e) => setLinkForm((p) => ({ ...p, server: e.target.value }))}
+                  required
+                  disabled={!selectedBroker}
+                  className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50"
+                >
+                  <option value="">{selectedBroker ? "Select server..." : "Select prop firm first"}</option>
+                  {selectedBroker?.servers.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Login */}
+              <div>
+                <label className="text-xs text-zinc-500 block mb-1.5">MT5 Login</label>
+                <input
+                  value={linkForm.login}
+                  onChange={(e) => setLinkForm((p) => ({ ...p, login: e.target.value.replace(/\D/g, "") }))}
+                  placeholder="e.g. 576984"
+                  required
+                  inputMode="numeric"
+                  className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 transition-colors font-mono"
+                />
+              </div>
+
+              {/* Read-only password */}
+              <div>
+                <label className="text-xs text-zinc-500 block mb-1.5">
+                  Read-Only Password <span className="text-zinc-600">(investor password)</span>
+                </label>
+                <input
+                  type="password"
+                  value={linkForm.password}
+                  onChange={(e) => setLinkForm((p) => ({ ...p, password: e.target.value }))}
+                  placeholder="Your investor password"
+                  required
+                  className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 transition-colors"
+                />
+              </div>
             </div>
-            <div className="sm:w-44">
-              <label className="text-xs text-zinc-500 block mb-1.5">
-                Login
-              </label>
-              <input
-                value={linkForm.login}
-                onChange={(e) =>
-                  setLinkForm((p) => ({ ...p, login: e.target.value }))
-                }
-                placeholder="e.g. 576984"
-                required
-                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 transition-colors"
-              />
-            </div>
-            <div className="sm:self-end">
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-xs text-zinc-500">Must be a fresh challenge with zero trade history</span>
+              </div>
               <button
                 type="submit"
                 disabled={linking}
-                className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium disabled:opacity-50 transition-colors"
+                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium disabled:opacity-50 transition-colors"
               >
-                {linking ? "Linking..." : "Link Account"}
+                {linking ? "Submitting..." : "Submit for Verification"}
               </button>
             </div>
           </form>
-          <p className="text-xs text-zinc-500 mt-3">
-            Enter your MT5 read-only credentials. We only track your trading performance — no trades will be executed on your account.
-          </p>
-          <p className="text-xs text-zinc-500 mt-1">
-            Only MT5 accounts from supported prop firms can be linked.
-          </p>
           {error && (
             <p className="text-red-400 text-sm mt-3 flex items-center gap-1.5">
               <svg
