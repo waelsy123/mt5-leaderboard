@@ -173,6 +173,25 @@ export default function CashbackPage() {
         </div>
       </section>
 
+      {/* Visual Steps */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-16">
+          {[
+            { step: "1", title: "Buy Challenge", desc: "Purchase any MT5 prop firm challenge up to $100K", icon: "\uD83D\uDED2" },
+            { step: "2", title: "Complete It", desc: "Trade the challenge \u2014 pass or fail, you still qualify", icon: "\uD83D\uDCCA" },
+            { step: "3", title: "Submit Proof", desc: "Link your account and we verify automatically", icon: "\u2705" },
+            { step: "4", title: "Get Paid", desc: "Receive 20% cashback in USDT to your wallet", icon: "\uD83D\uDCB0" },
+          ].map((item) => (
+            <div key={item.step} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 text-center relative">
+              <div className="text-3xl mb-3">{item.icon}</div>
+              <div className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold mb-2">{item.step}</div>
+              <h3 className="text-sm font-semibold text-white mb-1">{item.title}</h3>
+              <p className="text-xs text-zinc-500">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Cashback table */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <h2 className="text-2xl font-bold text-white mb-6">Cashback Amounts</h2>
